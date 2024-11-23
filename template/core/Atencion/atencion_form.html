@@ -1,0 +1,38 @@
+{% extends "components/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">{% if object %}Editar{% else %}Agregar{% endif %} Atención Médica</h1>
+
+    <form method="post" class="bg-light p-4 rounded shadow">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.paciente.id_for_label }}" class="form-label">Paciente</label>
+            {{ form.paciente }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.diagnostico.id_for_label }}" class="form-label">Diagnósticos</label>
+            {{ form.diagnostico }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.motivo_consulta.id_for_label }}" class="form-label">Motivo de Consulta</label>
+            {{ form.motivo_consulta }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.tratamiento.id_for_label }}" class="form-label">Tratamiento</label>
+            {{ form.tratamiento }}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.comentario.id_for_label }}" class="form-label">Comentario</label>
+            {{ form.comentario }}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 mb-2">Guardar Atención</button>
+        <a href="{% url 'core:atencion_list' %}" class="btn btn-outline-secondary w-100">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

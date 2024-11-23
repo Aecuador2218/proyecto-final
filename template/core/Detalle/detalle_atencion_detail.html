@@ -1,0 +1,29 @@
+{% extends "components/base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Detalle de Atención</h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>Cabecera de Atención</th>
+            <td>{{ detalle_atencion.atencion }}</td>
+        </tr>
+        <tr>
+            <th>Medicamento</th>
+            <td>{{ detalle_atencion.medicamento }}</td>
+        </tr>
+        <tr>
+            <th>Cantidad</th>
+            <td>{{ detalle_atencion.cantidad }}</td>
+        </tr>
+        <tr>
+            <th>Prescripción</th>
+            <td>{{ detalle_atencion.prescripcion }}</td>
+        </tr>
+        <tr>
+            <th>Duración del Tratamiento (días)</th>
+            <td>{{ detalle_atencion.duracion_tratamiento }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'core:detalle_atencion_list' %}" class="btn btn-secondary">Volver a la lista</a>
+</div>
+{% endblock %}

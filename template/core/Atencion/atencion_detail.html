@@ -1,0 +1,33 @@
+{% extends "components/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Detalle de Atención Médica</h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>Paciente</th>
+            <td>{{ atencion.paciente }}</td>
+        </tr>
+        <tr>
+            <th>Fecha de Atención</th>
+            <td>{{ atencion.fecha_atencion }}</td>
+        </tr>
+        <tr>
+            <th>Diagnósticos</th>
+            <td>{% for diag in atencion.diagnostico.all %}{{ diag }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+        </tr>
+        <tr>
+            <th>Motivo de Consulta</th>
+            <td>{{ atencion.motivo_consulta }}</td>
+        </tr>
+        <tr>
+            <th>Tratamiento</th>
+            <td>{{ atencion.tratamiento }}</td>
+        </tr>
+        <tr>
+            <th>Comentario</th>
+            <td>{{ atencion.comentario }}</td>
+        </tr>
+    </table>
+    <a href="{% url 'core:atencion_list' %}" class="btn btn-secondary">Volver a la lista</a>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+<style>
+    #map {
+        height: 500px;
+        width: 100%;
+    }
+    body {
+        font-family: Arial, sans-serif;
+    }
+</style>
+<div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary bg-opacity-75">
+                <h5 class="modal-title text-white fw-bold" id="mapModalLabel">
+                    <i class="fas fa-user-circle me-2"></i>Tu ubicación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="map"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% block js %}
+<script>
+    let map, marker;
+
+    // Inicializa el mapa cuando se llama esta función
+    function initMap() {
+        const defaultPosition = { lat: -2.094071, lng: -79.692410 };
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: defaultPosition,
+            zoom: 8,
+        });
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userPosition = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.setCenter(userPosition);
+
+                    marker = new google.maps.Marker({
+                        position: userPosition,
+                        map: map,
+                        title: "Tu ubicación",
+                    });
+
+                    document.getElementById("id_latitud").value = userPosition.lat.toFixed(6);
+                    document.getElementById("id_longitud").value = userPosition.lng.toFixed(6);
+                },
+                (error) => {
+                    console.error("Error al obtener la ubicación:", error.message);
+                    alert("No se pudo obtener tu ubicación. Usa el mapa para seleccionar manualmente.");
+                }
+            );
+        } else {
+            alert("La geolocalización no está soportada por este navegador. Usa el mapa para seleccionar manualmente.");
+        }
+
+        map.addListener("click", (event) => {
+            const clickedLocation = event.latLng;
+
+            if (!marker) {
+                marker = new google.maps.Marker({
+                    position: clickedLocation,
+                    map: map,
+                    title: "Ubicación seleccionada",
+                });
+            } else {
+                marker.setPosition(clickedLocation);
+            }
+
+            document.getElementById("id_latitud").value = clickedLocation.lat().toFixed(6);
+            document.getElementById("id_longitud").value = clickedLocation.lng().toFixed(6);
+        });
+    }
+
+    // Carga el script de Google Maps y llama a initMap
+    function loadGoogleMaps() {
+        if (!document.querySelector("script[src*='maps.googleapis.com']")) {
+            const script = document.createElement("script");
+            script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyCx1t2u2KcArNV3hvHCAfOHVLf66uhFLII&callback=initMap";
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        } else {
+            initMap();
+        }
+    }
+
+    // Inicializa el mapa solo cuando el modal se muestra
+    document.getElementById("mapModal").addEventListener("shown.bs.modal", () => {
+        loadGoogleMaps();
+    });
+</script>
+{% endblock %}

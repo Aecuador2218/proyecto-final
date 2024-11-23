@@ -1,0 +1,51 @@
+{% extends "components/base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Lista de Auditorías</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Lista de Auditorías</h1>
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Tabla</th>
+                    <th scope="col">Acción</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Estación</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auditoria in auditorias %}
+                    <tr>
+                        <td>{{ auditoria.usuario.username }}</td>
+                        <td>{{ auditoria.tabla }}</td>
+                        <td>{{ auditoria.get_accion_display }}</td>
+                        <td>{{ auditoria.fecha }}</td>
+                        <td>{{ auditoria.hora }}</td>
+                        <td>{{ auditoria.estacion }}</td>
+                        <td>
+                            <a href="{% url 'core:detalle_auditoria' auditoria.pk %}" class="btn btn-info btn-sm">Ver Detalle</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No hay auditorías registradas.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+{% endblock %}

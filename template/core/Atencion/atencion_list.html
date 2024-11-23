@@ -1,0 +1,90 @@
+{% extends "components/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1> Atención y Exámenes</h1>
+            <p class="lead">Selecciona una opción para gestionar las atenciones y exámenes solicitados</p>
+        </div>
+    
+        <div class="row justify-content-center">
+            <!-- Botón para agregar una nueva Atención -->
+            <div class="col-md-4">
+                <a href="{% url 'core:atencion_create' %}" class="btn btn-primary btn-lg w-100 mb-3">
+                    Agregar Atención
+                </a>
+            </div>
+            <!-- Botón para ver Detalles de Atención -->
+            <div class="col-md-4">
+                <a href="{% url 'core:detalle_atencion_list' %}" class="btn btn-info btn-lg w-100 mb-3">
+                    Detalles de Atención
+                </a>
+            </div>
+            <!-- Botón para ver Exámenes Solicitados -->
+            <div class="col-md-4">
+                <a href="{% url 'core:ExamenSolicitado_list' %}" class="btn btn-secondary btn-lg w-100 mb-3">
+                    Exámenes Solicitados
+                </a>
+            </div>
+        </div>
+    
+   
+    <h1>Lista de Atenciones</h1>
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Paciente</th>
+                <th>Fecha de Atención</th>
+                <th>Motivo de Consulta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for atencion in atenciones %}
+                <tr>
+                    <td>{{ atencion.paciente }}</td>
+                    <td>{{ atencion.fecha_atencion }}</td>
+                    <td>{{ atencion.motivo_consulta }}</td>
+                    <td>
+                        <a href="{% url 'core:atencion_detail' atencion.pk %}" class="btn btn-info btn-sm">Ver</a>
+                        <a href="{% url 'core:atencion_edit' atencion.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal{{ atencion.pk }}">
+                            Eliminar
+                        </button>
+                    </td>
+                </tr>
+                <!-- Modal de Confirmación para Eliminar -->
+                <div class="modal fade" id="confirmDeleteModal{{ cita.pk }}" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirmar Eliminación</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Estás seguro de que deseas eliminar esta atención médica?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <form method="post" action="{% url 'core:atencion_delete' atencion.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No hay atenciones disponibles</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <!-- Opciones adicionales -->
+        <div class="modal-body text-center mt-4 p-4 bg-light rounded shadow">
+            <p>Gestiona todos los aspectos relacionados con la atención y exámenes.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
